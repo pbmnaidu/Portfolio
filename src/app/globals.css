@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #09090e;
+  --surface: #13121c;
+  --border: #242038;
+  --accent: #8b5cf6;
+  --text: #f3f4f6;
+  --muted: #a78bfa;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dynamic Background Overlay Structures */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.3s ease, background-image 0.3s ease;
+}
+
+/* Layer component containers, cards, sidebars & inputs cleanly above background pattern overlay */
+main, aside, nav, section, article, header, footer, form,
+.bg-portfolio-surface {
+  position: relative;
+  z-index: 2;
+}
+
+input, textarea, select, button {
+  position: relative;
+  z-index: 3;
+}
+
+/* Keyframe Animations for Dynamic Background Overlay Structures */
+@keyframes bgGridShift {
+  0% { background-position: 0 0; }
+  100% { background-position: 76px 76px; }
+}
+
+@keyframes bgDotPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.04); opacity: 0.9; }
+}
+
+@keyframes bgMeshMorph {
+  0% {
+    filter: blur(75px) hue-rotate(0deg);
+  }
+  50% {
+    filter: blur(95px) hue-rotate(25deg);
+  }
+  100% {
+    filter: blur(75px) hue-rotate(0deg);
+  }
+}
+
+@keyframes bgScanlineWave {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+/* 1. Futuristic Tech Grid Overlay with Interactive Cursor Spotlight */
+html[data-bg-pattern="grid"] body::before,
+body[data-bg-pattern="grid"]::before {
+  background-image: 
+    linear-gradient(to right, var(--border) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, var(--border) 1.5px, transparent 1.5px);
+  background-size: 38px 38px;
+  mask-image: radial-gradient(circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 30%, rgba(0,0,0,0.25) 70%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 30%, rgba(0,0,0,0.25) 70%, transparent 100%);
+  opacity: 0.85;
+  animation: bgGridShift 30s linear infinite;
+  transition: opacity 0.3s ease, mask-image 0.2s ease;
+}
+
+html[data-is-hovering="true"][data-bg-pattern="grid"] body::before,
+html[data-is-hovering="true"] body[data-bg-pattern="grid"]::before {
+  mask-image: radial-gradient(circle 700px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 45%, rgba(0,0,0,0.4) 80%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 700px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 45%, rgba(0,0,0,0.4) 80%, transparent 100%);
+  opacity: 1;
+  animation-duration: 15s;
+}
+
+/* 2. Cyber Dot Matrix Overlay with Pulsing Mouse Glow */
+html[data-bg-pattern="dots"] body::before,
+body[data-bg-pattern="dots"]::before {
+  background-image: radial-gradient(var(--cursor-color, var(--accent)) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(circle 450px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 35%, rgba(0,0,0,0.2) 75%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 450px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 35%, rgba(0,0,0,0.2) 75%, transparent 100%);
+  opacity: 0.65;
+  animation: bgDotPulse 4s ease-in-out infinite alternate;
+  transition: opacity 0.3s ease;
+}
+
+html[data-is-hovering="true"][data-bg-pattern="dots"] body::before,
+html[data-is-hovering="true"] body[data-bg-pattern="dots"]::before {
+  mask-image: radial-gradient(circle 650px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 50%, rgba(0,0,0,0.4) 85%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 650px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 50%, rgba(0,0,0,0.4) 85%, transparent 100%);
+  opacity: 0.95;
+}
+
+/* 3. Ambient Glowing Mesh Orbs with Interactive Cursor Tracking */
+html[data-bg-pattern="mesh"] body::before,
+body[data-bg-pattern="mesh"]::before {
+  background: 
+    radial-gradient(circle at var(--mouse-percent-x, 30%) var(--mouse-percent-y, 30%), var(--cursor-color, var(--accent)) 0%, transparent 50%),
+    radial-gradient(circle at 85% 75%, var(--muted) 0%, transparent 45%),
+    radial-gradient(circle at 15% 85%, var(--border) 0%, transparent 55%);
+  filter: blur(75px);
+  opacity: 0.45;
+  animation: bgMeshMorph 12s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
+
+html[data-is-hovering="true"][data-bg-pattern="mesh"] body::before,
+html[data-is-hovering="true"] body[data-bg-pattern="mesh"]::before {
+  opacity: 0.75;
+  filter: blur(60px);
+}
+
+/* 4. Architectural Scanlines Overlay with Wave Motion */
+html[data-bg-pattern="waves"] body::before,
+body[data-bg-pattern="waves"]::before {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    var(--cursor-color, var(--accent)) 10px,
+    var(--cursor-color, var(--accent)) 11px
+  );
+  mask-image: radial-gradient(circle 470px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 35%, rgba(0,0,0,0.2) 75%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 470px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 35%, rgba(0,0,0,0.2) 75%, transparent 100%);
+  opacity: 0.35;
+  animation: bgScanlineWave 12s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+html[data-is-hovering="true"][data-bg-pattern="waves"] body::before,
+html[data-is-hovering="true"] body[data-bg-pattern="waves"]::before {
+  mask-image: radial-gradient(circle 670px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 50%, rgba(0,0,0,0.4) 85%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 670px at var(--mouse-x, 50%) var(--mouse-y, 50%), #000 50%, rgba(0,0,0,0.4) 85%, transparent 100%);
+  opacity: 0.65;
+  animation-duration: 6s;
+}
+
+/* 5. Clean Surface */
+html[data-bg-pattern="clean"] body::before,
+body[data-bg-pattern="clean"]::before {
+  opacity: 0;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+/* Base Transitions for Dynamic Themes */
+*, *::before, *::after {
+  border-color: var(--border);
+}
+
+/* Smooth Custom Cursor Styles */
+.custom-cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 8px; height: 8px;
+  background-color: var(--cursor-color, var(--accent));
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, background-color 0.3s ease;
+  box-shadow: 0 0 10px var(--cursor-color, var(--accent));
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  border: 1px solid var(--cursor-color, var(--accent));
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, border-color 0.3s ease, opacity 0.25s ease;
+  opacity: 0.6;
+}
+
+.custom-cursor-ring.hovered {
+  width: 58px;
+  height: 58px;
+  border-color: var(--cursor-color, var(--accent));
+  background: rgba(139, 92, 246, 0.08);
+  opacity: 0.9;
+}
